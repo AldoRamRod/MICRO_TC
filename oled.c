@@ -4,8 +4,10 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "ssd1306.h"
+#include "impact_data.h"
 
 const uint8_t num_chars_per_disp[]={7,7,7,5};
+const uint8_t *fonts[]={impact};
 
 void arranque(void);
 void print(void);
@@ -33,7 +35,7 @@ void arranque(void) {
 
 
 void print(void) {
-    const char *words[]= {"Aldo", "Ramirez", "Rodriguez"};
+    const char *words[]= {"ARR"};
 
     ssd1306_t disp;
     disp.external_vcc=false;
@@ -44,7 +46,7 @@ void print(void) {
     for(;;) {
         
         for(int i=0; i<sizeof(words)/sizeof(char *); ++i) {
-            ssd1306_draw_string(&disp, 8, 24, 2, words[i]);
+            ssd1306_draw_string(&disp, 25, 25, 2, words[i]);
             ssd1306_show(&disp);
             sleep_ms(800);
             ssd1306_clear(&disp);
