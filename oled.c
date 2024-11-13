@@ -3,14 +3,17 @@
 #include <string.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
-#include "ssd1306.h"
-#include "impact_data.h"
+#include "dandan.h"
+#include "papyrus_data.h"
 
 const uint8_t num_chars_per_disp[]={7,7,7,5};
-const uint8_t *fonts[]={impact};
+const uint8_t *fonts[]= {papyrus};
+
+
+#define SLEEPTIME 25
 
 void arranque(void);
-void print(void);
+void impre(void);
 
 int main() {
     stdio_init_all();
@@ -19,7 +22,7 @@ int main() {
     arranque();
 
     // Impresion en pantalla oled 
-    print();
+    impre();
 
     return 0;
 }
@@ -34,22 +37,19 @@ void arranque(void) {
 }
 
 
-void print(void) {
-    const char *words[]= {"ARR"};
+void impre(void) {
 
-    ssd1306_t disp;
+    dandan_t disp;
     disp.external_vcc=false;
-    ssd1306_init(&disp, 128, 64, 0x3C, i2c1);
-    ssd1306_clear(&disp);
+    dandan_init(&disp, 128,65, 0x3C, i2c1);
+
+    dandan_limp(&disp);
     char buf[8];
 
     for(;;) {
-        
-        for(int i=0; i<sizeof(words)/sizeof(char *); ++i) {
-            ssd1306_draw_string(&disp, 25, 25, 2, words[i]);
-            ssd1306_show(&disp);
-            sleep_ms(1000);
-            ssd1306_clear(&disp);
-        }        
+        dandan_escribe_string(&disp,25,25,3,"ARR");
+        dandan_mostrar(&disp);
+        sleep_ms(1000);
+        dandan_limp(&disp);
     }
 }
